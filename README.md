@@ -68,7 +68,9 @@ hochzählen, sonst behalten schon installierte Geräte den alten Stand.
 - **Kein Textbeschnitt am Rand.** Der Beschnitt auf den Testaufnahmen
   (headless Edge) war eine Eigenheit der Aufnahmetechnik, kein Layoutfehler.
 
-## Offen
+## Entschieden
 
-- Schöner wäre `krank.cse-service.net` statt `cse-krankmeldung.pages.dev`.
-  Dafür genügt ein DNS-Eintrag (CNAME), die Website selbst bleibt unangetastet.
+- **Die Adresse bleibt `cse-krankmeldung.pages.dev`** (Entscheidung 17.08.2026).
+  Eine eigene Unteradresse `krank.cse-service.net` per CNAME wurde erwogen und
+  verworfen — nicht erneut vorschlagen. Aushang, QR-Code und die Vorlagentexte
+  für WhatsApp/Teams zeigen auf diese Adresse.
