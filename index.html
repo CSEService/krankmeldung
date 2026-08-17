@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Krankmeldung – CSE Service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Krankmeldung an CSE Service übermitteln – schnell, einfach, digital.">
+<meta name="robots" content="noindex">
+
+<!-- macht die Seite auf dem Handy installierbar -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1b6ec2">
+<link rel="icon" href="bilder/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="bilder/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Krankmeldung">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+  :root {
+    --blau: #1b6ec2;
+    --blau-dunkel: #14528a;
+    --grau: #f4f6f8;
+    --rand: #d8dee5;
+    --text: #1a2330;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; height: 100%;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    color: var(--text); background: var(--grau);
+  }
+  body { display: flex; flex-direction: column; }
+
+  /* ---- Kopfzeile ---- */
+  header {
+    display: flex; align-items: center; gap: 12px;
+    padding: calc(env(safe-area-inset-top) + 10px) 14px 10px;
+    background: linear-gradient(180deg, var(--blau) 0%, var(--blau-dunkel) 100%);
+    color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.18); z-index: 2;
+  }
+  header .logo { background: #fff; border-radius: 8px; padding: 4px 6px; display: flex; }
+  header .logo img { height: 30px; display: block; }
+  header h1 { font-size: 17px; margin: 0; font-weight: 600; letter-spacing: .2px; }
+  header .unter { font-size: 12px; opacity: .85; margin-top: 1px; }
+
+  /* ---- Installations-Hinweis ---- */
+  #einbau {
+    display: none; align-items: center; gap: 10px;
+    padding: 10px 14px; background: #fff8e1; border-bottom: 1px solid #f0d999; font-size: 14px;
+  }
+  #einbau.an { display: flex; }
+  #einbau p { margin: 0; flex: 1; line-height: 1.35; }
+  #einbau button {
+    border: 0; border-radius: 8px; background: var(--blau); color: #fff;
+    padding: 9px 14px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
+  #einbau .zu {
+    background: none; color: #7a6a3a; font-size: 20px; padding: 0 4px; font-weight: 400; line-height: 1;
+  }
+
+  /* ---- Formularbereich ---- */
+  main { flex: 1; position: relative; background: #fff; }
+  iframe { border: 0; width: 100%; height: 100%; display: block; }
+
+  #laedt, #kein-netz {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px;
+    background: #fff; text-align: center; padding: 24px;
+  }
+  #kein-netz { display: none; }
+  #laedt.weg { display: none; }
+  .kreisel {
+    width: 34px; height: 34px; border: 3px solid var(--rand);
+    border-top-color: var(--blau); border-radius: 50%; animation: dreh .9s linear infinite;
+  }
+  @keyframes dreh { to { transform: rotate(360deg); } }
+  .hinweis { font-size: 14px; color: #5c6773; }
+
+  /* ---- Fusszeile ---- */
+  footer {
+    padding: 8px 14px calc(env(safe-area-inset-bottom) + 8px);
+    background: #fff; border-top: 1px solid var(--rand);
+    font-size: 12.5px; text-align: center; color: #5c6773;
+  }
+  footer a { color: var(--blau); text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo"><img src="bilder/logo-quelle.png" alt="CSE Service"></span>
+  <div>
+    <h1>Krankmeldung</h1>
+    <div class="unter">Schnell, einfach, digital.</div>
+  </div>
+</header>
+
+<div id="einbau">
+  <p id="einbau-text"></p>
+  <button id="einbau-knopf" type="button">Installieren</button>
+  <button class="zu" id="einbau-zu" type="button" aria-label="Hinweis schließen">×</button>
+</div>
+
+<main>
+  <iframe id="formular" title="Krankmeldungsformular" src="https://cse-service.net/krankmeldung/"></iframe>
+
+  <div id="laedt">
+    <div class="kreisel"></div>
+    <div class="hinweis">Formular wird geladen …</div>
+  </div>
+
+  <div id="kein-netz">
+    <div style="font-size:38px">📡</div>
+    <strong>Keine Internetverbindung</strong>
+    <div class="hinweis">Die Krankmeldung braucht Netz. Bitte WLAN oder mobile Daten einschalten und erneut öffnen.</div>
+  </div>
+</main>
+
+<footer>
+  Probleme? <a href="https://cse-service.net/krank" target="_blank" rel="noopener">Formular im Browser öffnen</a>
+</footer>
+
+<script>
+  var formular = document.getElementById('formular');
+  var laedt    = document.getElementById('laedt');
+  var einbau   = document.getElementById('einbau');
+
+  // ---- Ladeanzeige ----
+  formular.addEventListener('load', function () { laedt.classList.add('weg'); });
+  setTimeout(function () { laedt.classList.add('weg'); }, 8000);   // Notbremse
+
+  // ---- Ohne Netz gar nicht erst laden ----
+  function netzPruefen() {
+    var offline = !navigator.onLine;
+    document.getElementById('kein-netz').style.display = offline ? 'flex' : 'none';
+    if (offline) { laedt.classList.add('weg'); }
+  }
+  window.addEventListener('online', function () { netzPruefen(); formular.contentWindow.location.reload(); });
+  window.addEventListener('offline', netzPruefen);
+  netzPruefen();
+
+  // ---- „Auf dem Handy installieren" ----
+  var laeuftAlsApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  var istApple     = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var merker       = null;
+
+  function bannerZeigen(text, knopfAn) {
+    document.getElementById('einbau-text').textContent = text;
+    document.getElementById('einbau-knopf').style.display = knopfAn ? '' : 'none';
+    einbau.classList.add('an');
+  }
+
+  if (!laeuftAlsApp && sessionStorage.getItem('einbau-zu') !== 'ja') {
+    // Android/Windows: der Browser meldet sich selbst, sobald Installation möglich ist
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault(); merker = e;
+      bannerZeigen('Krankmeldung als App aufs Gerät legen – dann genügt künftig ein Fingertipp.', true);
+    });
+    // iPhone/iPad: dort gibt es kein solches Ereignis, nur den Weg über „Teilen"
+    if (istApple) {
+      bannerZeigen('Aufs iPhone legen: unten auf „Teilen“ tippen, dann „Zum Home-Bildschirm“.', false);
+    }
+  }
+
+  document.getElementById('einbau-knopf').addEventListener('click', function () {
+    if (!merker) return;
+    merker.prompt();
+    merker.userChoice.then(function () { merker = null; einbau.classList.remove('an'); });
+  });
+
+  document.getElementById('einbau-zu').addEventListener('click', function () {
+    einbau.classList.remove('an');
+    sessionStorage.setItem('einbau-zu', 'ja');
+  });
+
+  window.addEventListener('appinstalled', function () { einbau.classList.remove('an'); });
+
+  // ---- Hintergrunddienst anmelden (macht die App installierbar) ----
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js'); });
+  }
+</script>
+</body>
+</html>
