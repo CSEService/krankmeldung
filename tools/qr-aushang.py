@@ -5,7 +5,7 @@ from pathlib import Path
 import segno
 from PIL import Image, ImageDraw, ImageFont
 
-ADRESSE = "https://cseservice.github.io/krankmeldung/"
+ADRESSE = "https://cse-krankmeldung.pages.dev/"
 BASIS = Path(__file__).resolve().parent.parent
 
 # A4 bei 300 dpi
