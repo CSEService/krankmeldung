@@ -61,9 +61,14 @@ Einmalig nötig: `npx wrangler login` — die Anmeldung läuft über das Cloudfl
 Wichtig: Nach jeder Änderung in `sw.js` die Zahl in `const CACHE = 'krankmeldung-v1'`
 hochzählen, sonst behalten schon installierte Geräte den alten Stand.
 
+## Auf echtem Gerät geprüft (17.08.2026)
+
+- **Absenden aus dem Rahmen heraus funktioniert.** Das Elementor-Formular meldet
+  sich also nicht daran, dass es fremd eingebettet ist — der Rahmen kann bleiben.
+- **Kein Textbeschnitt am Rand.** Der Beschnitt auf den Testaufnahmen
+  (headless Edge) war eine Eigenheit der Aufnahmetechnik, kein Layoutfehler.
+
 ## Offen
 
-- Absenden des Formulars **im Rahmen** einmal mit einem Testeintrag prüfen
-  (Elementor-Formular; das Absenden läuft über die Website selbst).
 - Schöner wäre `krank.cse-service.net` statt `cse-krankmeldung.pages.dev`.
   Dafür genügt ein DNS-Eintrag (CNAME), die Website selbst bleibt unangetastet.
