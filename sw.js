@@ -4,7 +4,7 @@
 // Das Formular selbst wird NIE zwischengespeichert – es liegt auf cse-service.net
 // und muss immer frisch geladen werden.
 
-const CACHE = 'krankmeldung-v1';
+const CACHE = 'krankmeldung-v2';
 const HUELLE = [
   './',
   './index.html',
